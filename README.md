@@ -1,61 +1,217 @@
-Advanced Time Series Forecasting with Transformer and Attention
-1. Introduction
+Household Power Consumption Forecasting
+Transformer with Explicit Attention & XGBoost Baseline
+📌 Project Overview
 
-This project implements an advanced Transformer-based deep learning model for multivariate time series forecasting. The objective is to predict Global Active Power consumption using historical sensor data indexed by time. The work focuses on capturing long-range temporal dependencies and feature importance through self-attention mechanisms.
+This project implements an end-to-end multivariate time series forecasting system for predicting Global Active Power using a custom Transformer neural network with explicit multi-head attention. In addition to deep learning, a strong XGBoost lag-based model is implemented as a baseline to ensure fair performance comparison.
 
-2. Dataset Description
+A key focus of this project is explainability—the Transformer is designed to expose attention weights, allowing analysis of which historical timesteps influence predictions the most.
 
-The dataset consists of a large-scale multivariate time series indexed by a single time column. It includes power consumption and electrical measurements sampled at regular intervals. Missing values are handled using time-based interpolation.
+🎯 Objectives
 
-3. Feature Engineering
+Forecast household energy consumption accurately
 
-To satisfy the minimum feature requirement and enhance predictive power, additional derived features were created:
+Capture long-term temporal dependencies using attention
+
+Provide model interpretability through attention weights
+
+Compare deep learning performance against a classical ML baseline
+
+Follow best practices in time series validation
+
+📊 Dataset Description
+
+Dataset: Household Power Consumption
+
+Frequency: Minute-level readings
+
+Target Variable: global_active_power
+
+Preprocessing Steps:
+
+Column normalization and cleaning
+
+Datetime parsing and indexing
+
+Numeric coercion and time-based interpolation
+
+Removal of missing values after feature engineering
+
+🧠 Feature Engineering
+
+The model uses 11 multivariate features, including:
+
+Raw Power Signals
+
+Global active power
+
+Global reactive power
+
+Voltage
+
+Global intensity
+
+Sub-metering (1, 2, 3)
+
+Time-Based Features
 
 Hour of day
 
 Day of week
 
-24-step rolling mean
+Statistical Features
 
-24-step rolling standard deviation
-This results in 11 total input features.
+24-hour rolling mean
 
-4. Preprocessing
+24-hour rolling standard deviation
 
-All features are normalized using StandardScaler. Sliding window sequences are created with a fixed look-back window of 48 timesteps.
+These features allow the model to learn daily patterns, weekly seasonality, and short-term volatility.
 
-5. Model Architecture
+🔄 Data Preparation
 
-A Transformer Encoder with multi-head self-attention is used. The architecture includes:
+Features are standardized using StandardScaler
 
-Input embedding layer
+Sliding windows of 48 timesteps are created for supervised learning
 
-Multi-head self-attention
+Rolling window cross-validation ensures:
 
-Stacked Transformer encoders
+No data leakage
 
-Fully connected output layer
+Realistic forecasting conditions
 
-6. Training Strategy
+Temporal generalization
 
-Rolling window time-series cross-validation is employed instead of a single train-test split. This ensures robustness and prevents temporal leakage.
+🤖 Transformer Model Architecture
 
-7. Hyperparameter Optimization
+The Transformer is implemented from scratch using PyTorch, avoiding internal abstractions to ensure attention weights are accessible.
 
-A structured hyperparameter search is performed over embedding dimension and number of attention heads. The configuration yielding the lowest validation RMSE is selected.
+Architecture Components
 
-8. Baseline Model
+Linear embedding layer
 
-A strong multivariate XGBoost baseline is implemented using lagged values of all features, ensuring a fair comparison.
+Stacked Multi-Head Self-Attention layers
 
-9. Evaluation Metrics
+Residual connections
 
-Models are evaluated using RMSE, MASE, and sMAPE.
+Layer normalization
 
-10. Attention Weight Analysis
+Feed-forward networks
 
-Learned attention weights indicate that recent timesteps receive higher importance, with voltage and global intensity consistently contributing strongly to predictions. This improves interpretability compared to traditional models.
+Final regression head
 
-11. Conclusion
+Why Custom Transformer?
 
-The Transformer-based model outperforms the baseline while providing interpretability through attention mechanisms. The approach is suitable for real-world forecasting tasks involving complex temporal dependencies.# AI_Program
+PyTorch’s built-in TransformerEncoder does not reliably expose attention weights. This custom design ensures:
+
+Stable attention extraction
+
+Full transparency
+
+Research-grade explainability
+
+🔍 Attention-Based Explainability
+
+After training:
+
+Attention weights are extracted directly from the model
+
+Importance scores are computed across:
+
+Batch dimension
+
+Attention heads
+
+Query timesteps
+
+The output identifies which historical timesteps most influence the prediction
+
+This provides valuable insights into:
+
+Short-term vs long-term dependency usage
+
+Model decision behavior
+
+Temporal relevance patterns
+
+📈 Model Training
+
+Optimizer: Adam
+
+Loss function: Mean Squared Error (MSE)
+
+Hyperparameter search over:
+
+Embedding dimensions
+
+Number of attention heads
+
+Best model selected using validation RMSE
+
+🧪 Baseline Model (XGBoost)
+
+To benchmark performance, a strong multivariate XGBoost model is trained using:
+
+1-step lag features
+
+24-step lag features
+
+All engineered variables
+
+This ensures the Transformer’s performance is evaluated against a competitive traditional ML approach, not a weak baseline.
+
+📦 Outputs
+
+Best Transformer model saved as:
+
+final_transformer_attention_model.pth
+
+
+Printed validation RMSE scores
+
+Top influential timesteps from attention analysis
+
+Trained XGBoost baseline model
+
+🛠️ Requirements
+
+Python 3.9+
+
+PyTorch
+
+NumPy
+
+Pandas
+
+Scikit-learn
+
+XGBoost
+
+🚀 Applications
+
+Energy demand forecasting
+
+Smart grid optimization
+
+Load prediction for power utilities
+
+Explainable AI for time series
+
+Research and academic projects
+
+🔮 Future Improvements
+
+Feature-level attention
+
+Temporal Fusion Transformer (TFT)
+
+Probabilistic forecasting
+
+Multi-step forecasting horizon
+
+Attention heatmap visualization
+
+Hyperparameter tuning with Optuna
+
+🧾 Conclusion
+
+This project demonstrates how attention-based deep learning models can outperform traditional approaches while remaining interpretable and robust. The combination of a custom Transformer architecture, strong feature engineering, and rigorous validation makes this solution suitable for real-world forecasting tasks and research use cases.
+ providing interpretability through attention mechanisms. The approach is suitable for real-world forecasting tasks involving complex temporal dependencies.
